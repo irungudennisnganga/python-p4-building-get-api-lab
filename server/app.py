@@ -20,18 +20,55 @@ def index():
 
 @app.route('/bakeries')
 def bakeries():
-    return ''
+    # bakery=Bakery.Query().all().to_dict()
+    bakery=[]
+    for game in Bakery.query.all():
+        bakery_dict=game.to_dict()
+        bakery.append(bakery_dict)
+
+    
+    response=make_response(
+        jsonify(bakery),
+        200
+    )
+    
+    response.headers['content-Type']='application/json'
+    return response
 
 @app.route('/bakeries/<int:id>')
 def bakery_by_id(id):
-    return ''
+    bakery=Bakery.query.filter_by(id=id).first().to_dict()
+    response=make_response(
+        jsonify(bakery),
+        200
+    )
+    # response.headers['content-Type']='application/json'
+    return bakery
 
 @app.route('/baked_goods/by_price')
 def baked_goods_by_price():
-    return ''
+    baked=[]
+    for good in BakedGood.query.order_by(BakedGood.price.desc()).all():
+        good_dict=good.to_dict()
+        baked.append(good_dict)
+        
+    respose=make_response(
+        jsonify(baked),
+        200
+    )  
+    respose.headers['content-Type']='application/json'  
+    return respose
 
 @app.route('/baked_goods/most_expensive')
 def most_expensive_baked_good():
+    expensive=BakedGood.query.order_by(BakedGood.price.desc()).first().to_dict()
+    ressponse=make_response(
+        jsonify(expensive),
+        200
+    )
+    ressponse.headers['content-Type']='application/json'
+    return ressponse
+    
     return ''
 
 if __name__ == '__main__':
